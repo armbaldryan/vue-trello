@@ -4,7 +4,6 @@
     <template v-if="this.$store.getters.loading">
       <Loading />
     </template>
-
     <Boards />
   </v-container>
 </template>

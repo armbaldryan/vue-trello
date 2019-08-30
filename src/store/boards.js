@@ -1,4 +1,5 @@
 import * as fb from "firebase";
+const uuidv1 = require("uuid/v1");
 
 export default {
   state: {
@@ -22,6 +23,7 @@ export default {
           title: payload.title,
           description: payload.description,
           user: getters.user.id,
+          id: uuidv1(),
         };
 
         console.log(newAd);

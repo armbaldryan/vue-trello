@@ -1,7 +1,7 @@
 import store from "@/store";
 
 export async function authGuard(to, from, next) {
-  if (window.localStorage.getItem("userId")) {
+  if (window.localStorage.getItem("userId") !== "null") {
     next();
     if (!store.getters.user) {
       store.commit("setUser", {

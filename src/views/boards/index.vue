@@ -11,9 +11,11 @@
         height="200px"
         src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
       >
-        <v-card-title class="align-end fill-height">{{
+        <v-card-title class="align-end fill-height">
+          {{
           item.title
-        }}</v-card-title>
+          }}
+        </v-card-title>
       </v-img>
 
       <v-card-text>
@@ -21,7 +23,7 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn text color="orange">Open</v-btn>
+        <v-btn text color="orange" @click="openBoard(item.id)">Open</v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -35,6 +37,11 @@ export default {
   beforeCreate() {
     console.log(this.$store.getters.boards);
     this.$store.dispatch("fetchBoardsById", this.$store.getters.user.id);
+  },
+  methods: {
+    openBoard(id) {
+      this.$router.push(`/board/${id}`);
+    },
   },
 };
 </script>
