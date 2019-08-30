@@ -4,6 +4,7 @@ const uuidv1 = require("uuid/v1");
 export default {
   state: {
     boards: [],
+    lists: [],
   },
   mutations: {
     createBoard(state, payload) {
@@ -12,7 +13,11 @@ export default {
     loadBoards(state, payload) {
       state.boards = payload;
     },
+    removeLists(state) {
+      state.lists = null;
+    },
     loadLists(state, payload) {
+      console.log(state);
       state.lists = payload;
     },
     createList(state, payload) {
@@ -25,7 +30,7 @@ export default {
       commit("setLoading", true);
 
       try {
-        const newAd = {
+        let newAd = {
           title: payload.title,
           description: payload.description,
           user: getters.user.id,
@@ -36,10 +41,15 @@ export default {
           .ref(`boards/${getters.user.id}`)
           .push(newAd);
 
+        newAd = {
+          ...newAd,
+          id: myRef.key,
+        };
+
         await fb
           .database()
           .ref(`boards/${getters.user.id}/${myRef.key}`)
-          .set({ ...newAd, id: myRef.key });
+          .set(newAd);
 
         commit("createBoard", newAd);
 
@@ -81,7 +91,7 @@ export default {
         const board = fbVal.val();
 
         console.log(board);
-        commit("loadLists", board.lists);
+        commit("loadLists", Object.values(board.lists));
         commit("setLoading", false);
       } catch (error) {
         commit("setError", error.message);
@@ -146,6 +156,9 @@ export default {
   getters: {
     boards(state) {
       return state.boards;
+    },
+    lists(state) {
+      return state.lists;
     },
   },
 };

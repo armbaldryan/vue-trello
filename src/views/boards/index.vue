@@ -1,5 +1,6 @@
 <template>
   <div class="d-flex flex-wrap ml-100">
+    <div v-if="!this.$store.getters.boards.length">Not Found Lists</div>
     <v-card
       class="mr-10 mb-10"
       max-width="250"
@@ -11,11 +12,9 @@
         height="200px"
         src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
       >
-        <v-card-title class="align-end fill-height">
-          {{
+        <v-card-title class="align-end fill-height">{{
           item.title
-          }}
-        </v-card-title>
+        }}</v-card-title>
       </v-img>
 
       <v-card-text>
@@ -35,11 +34,11 @@ export default {
     boards: [],
   }),
   beforeCreate() {
-    console.log(this.$store.getters.boards);
     this.$store.dispatch("fetchBoardsById", this.$store.getters.user.id);
   },
   methods: {
     openBoard(id) {
+      console.log(id);
       this.$router.push(`/board/${id}`);
     },
   },

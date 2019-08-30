@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <v-app-bar color="indigo darken-2" dark max-height="70">
-      <v-toolbar-title>Vue Trello</v-toolbar-title>
+      <v-toolbar-title class="title" @click="homeClickHandler"
+        >Vue Trello</v-toolbar-title
+      >
 
       <div class="flex-grow-1"></div>
 
@@ -50,6 +52,9 @@ export default {
   }),
 
   methods: {
+    homeClickHandler() {
+      this.$router.push("/");
+    },
     logOut() {
       this.$store.dispatch("logoutUser");
       this.$router.push("/login");
@@ -57,3 +62,8 @@ export default {
   },
 };
 </script>
+<style>
+.title {
+  cursor: pointer;
+}
+</style>
