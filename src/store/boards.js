@@ -12,6 +12,12 @@ export default {
     loadBoards(state, payload) {
       state.boards = payload;
     },
+    loadLists(state, payload) {
+      state.lists = payload;
+    },
+    createList(state, payload) {
+      state.lists.push(payload);
+    },
   },
   actions: {
     async createBoard({ commit, getters }, payload) {
@@ -23,15 +29,17 @@ export default {
           title: payload.title,
           description: payload.description,
           user: getters.user.id,
-          id: uuidv1(),
         };
 
-        console.log(newAd);
-
-        await fb
+        var myRef = fb
           .database()
           .ref(`boards/${getters.user.id}`)
           .push(newAd);
+
+        await fb
+          .database()
+          .ref(`boards/${getters.user.id}/${myRef.key}`)
+          .set({ ...newAd, id: myRef.key });
 
         commit("createBoard", newAd);
 
@@ -42,18 +50,66 @@ export default {
         throw error;
       }
     },
-    async fetchBoardsById({ commit }, id) {
+    async fetchBoardsById({ commit }, userId) {
       commit("clearError");
       commit("setLoading", true);
 
       try {
         const fbVal = await fb
           .database()
-          .ref(`boards/${id}`)
+          .ref(`boards/${userId}`)
           .once("value");
         const boards = fbVal.val();
 
         commit("loadBoards", Object.values(boards));
+        commit("setLoading", false);
+      } catch (error) {
+        commit("setError", error.message);
+        commit("setLoading", false);
+        throw error;
+      }
+    },
+    async fetchListsByBoardId({ commit }, { userId, boardId }) {
+      commit("clearError");
+      commit("setLoading", true);
+
+      try {
+        const fbVal = await fb
+          .database()
+          .ref(`boards/${userId}/${boardId}`)
+          .once("value");
+        const board = fbVal.val();
+
+        console.log(board);
+        commit("loadLists", board.lists);
+        commit("setLoading", false);
+      } catch (error) {
+        commit("setError", error.message);
+        commit("setLoading", false);
+        throw error;
+      }
+    },
+    async createList({ commit }, { userId, boardId, title }) {
+      commit("clearError");
+      commit("setLoading", true);
+
+      try {
+        var myRef = fb
+          .database()
+          .ref(`boards/${userId}/${boardId}/lists`)
+          .push({
+            title,
+          });
+
+        const newList = { title, id: myRef.key };
+
+        await fb
+          .database()
+          .ref(`boards/${userId}/${boardId}/lists/${myRef.key}`)
+          .set(newList);
+
+        commit("createList", newList);
+
         commit("setLoading", false);
       } catch (error) {
         commit("setError", error.message);
