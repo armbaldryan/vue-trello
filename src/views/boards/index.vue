@@ -1,6 +1,10 @@
 <template>
   <div class="d-flex flex-wrap ml-100">
-    <div v-if="!this.$store.getters.boards.length">Not Found Lists</div>
+    <div
+      v-if="!this.$store.getters.boards.length && !this.$store.getter.loading"
+    >
+      Not Found Boards
+    </div>
     <v-card
       class="mr-10 mb-10"
       max-width="250"
@@ -38,7 +42,6 @@ export default {
   },
   methods: {
     openBoard(id) {
-      console.log(id);
       this.$router.push(`/board/${id}`);
     },
   },

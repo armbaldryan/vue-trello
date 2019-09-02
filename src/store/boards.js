@@ -17,8 +17,21 @@ export default {
       state.lists = null;
     },
     loadLists(state, payload) {
-      console.log(state);
       state.lists = payload;
+    },
+    updateList(state, { id, title }) {
+      state.lists = state.lists.map(item => {
+        if (item.id === id) {
+          return {
+            ...item,
+            title,
+          };
+        }
+        return item;
+      });
+    },
+    removeList(state, id) {
+      state.lists = state.lists.filter(item => item.id !== id);
     },
     createList(state, payload) {
       state.lists.push(payload);
@@ -90,7 +103,6 @@ export default {
           .once("value");
         const board = fbVal.val();
 
-        console.log(board);
         commit("loadLists", Object.values(board.lists));
         commit("setLoading", false);
       } catch (error) {
@@ -127,24 +139,44 @@ export default {
         throw error;
       }
     },
-    async updateAd({ commit }, { title, description, id }) {
+    async editList({ commit }, { userId, boardId, listId, title }) {
       commit("clearError");
       commit("setLoading", true);
 
       try {
         await fb
           .database()
-          .ref("ads")
-          .child(id)
+          .ref(`boards/${userId}/${boardId}/lists/${listId}`)
           .update({
             title,
-            description,
           });
-        commit("updateAd", {
+
+        commit("updateList", {
+          id: listId,
           title,
-          description,
-          id,
         });
+
+        commit("setLoading", false);
+      } catch (error) {
+        commit("setError", error.message);
+        commit("setLoading", false);
+        throw error;
+      }
+    },
+
+    async removeList({ commit }, { userId, boardId, listId }) {
+      commit("clearError");
+      commit("setLoading", true);
+
+      try {
+        await fb
+          .database()
+          .ref(`boards/${userId}/${boardId}/lists/`)
+          .child(listId)
+          .remove();
+
+        commit("removeList", listId);
+
         commit("setLoading", false);
       } catch (error) {
         commit("setError", error.message);

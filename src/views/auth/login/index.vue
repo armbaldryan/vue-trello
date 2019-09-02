@@ -79,7 +79,6 @@ export default {
         this.$store
           .dispatch("loginUser", user)
           .then(() => {
-            console.log(this.$store);
             this.$router.push("/");
           })
           .catch(() => {});

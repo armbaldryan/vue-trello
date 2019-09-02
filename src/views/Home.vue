@@ -29,11 +29,6 @@ export default {
   },
   mounted() {
     this.message = "6666";
-    /**
-     *  fb.auth()
-      .createUserWithEmailAndPassword("baldryanarmen@gmail.com", "1234556")
-      .then(user => console.log(user));
-     */
   },
 };
 </script>

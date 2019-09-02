@@ -62,6 +62,7 @@ export default {
   },
 };
 </script>
+
 <style>
 .title {
   cursor: pointer;
