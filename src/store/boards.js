@@ -1,5 +1,4 @@
 import * as fb from "firebase";
-const uuidv1 = require("uuid/v1");
 
 export default {
   state: {
@@ -14,7 +13,7 @@ export default {
       state.boards = payload;
     },
     removeLists(state) {
-      state.lists = null;
+      state.lists = [];
     },
     loadLists(state, payload) {
       state.lists = payload;
@@ -36,6 +35,22 @@ export default {
     createList(state, payload) {
       state.lists.push(payload);
     },
+    addCard(state, { listId, newCard: card }) {
+      state.lists = state.lists.map(item => {
+        if (item.id === listId && !item.cards) {
+          return {
+            ...item,
+            cards: [card],
+          };
+        } else if (item.id === listId && item.cards) {
+          return {
+            ...item,
+            cards: [...item.cards, card],
+          };
+        }
+        return item;
+      });
+    },
   },
   actions: {
     async createBoard({ commit, getters }, payload) {
@@ -54,9 +69,25 @@ export default {
           .ref(`boards/${getters.user.id}`)
           .push(newAd);
 
+        const imageExt = payload.image.name.slice(
+          payload.image.name.lastIndexOf(".")
+        );
+
+        await fb
+          .storage()
+          .ref(`boards/${myRef.key}${imageExt}`)
+          .put(payload.image);
+
+        const storage = fb.storage().ref();
+
+        const imageSrc = await storage
+          .child(`boards/${myRef.key}${imageExt}`)
+          .getDownloadURL();
+
         newAd = {
           ...newAd,
           id: myRef.key,
+          imageSrc: imageSrc,
         };
 
         await fb
@@ -103,7 +134,7 @@ export default {
           .once("value");
         const board = fbVal.val();
 
-        commit("loadLists", Object.values(board.lists));
+        commit("loadLists", board.lists ? Object.values(board.lists) : []);
         commit("setLoading", false);
       } catch (error) {
         commit("setError", error.message);
@@ -176,6 +207,36 @@ export default {
           .remove();
 
         commit("removeList", listId);
+
+        commit("setLoading", false);
+      } catch (error) {
+        commit("setError", error.message);
+        commit("setLoading", false);
+        throw error;
+      }
+    },
+    async addCard({ commit }, { userId, boardId, listId, title }) {
+      commit("clearError");
+      commit("setLoading", true);
+
+      try {
+        var myRef = fb
+          .database()
+          .ref(`boards/${userId}/${boardId}/lists/${listId}/cards`)
+          .push({
+            title,
+          });
+
+        const newCard = { title, id: myRef.key };
+
+        await fb
+          .database()
+          .ref(`boards/${userId}/${boardId}/lists/${listId}/cards/${myRef.key}`)
+          .set(newCard);
+
+        console.log({ listId, newCard });
+
+        commit("addCard", { listId, newCard });
 
         commit("setLoading", false);
       } catch (error) {

@@ -3,7 +3,7 @@ import App from "./App";
 import router from "./router";
 import store from "./store/index";
 import vuetify from "./plugins/vuetify";
-import firebase from "firebase";
+import * as fb from "firebase";
 import { fbConfig } from "./fbConfig";
 
 Vue.config.productionTip = false;
@@ -16,7 +16,7 @@ new Vue({
     title: "aaa",
   },
   beforeCreate() {
-    firebase.initializeApp(fbConfig);
+    fb.initializeApp(fbConfig);
   },
 
   vuetify,

@@ -24,7 +24,7 @@
       :setOpen="setOpen"
       v-if="isModalOpen"
       :saveHandler="saveHandler"
-      :saveDisabled="valid"
+      :saveDisabled="valid && !!image"
     >
       <v-flex xs12 sm12 md12>
         <v-toolbar dark color="primary">
@@ -47,6 +47,22 @@
               v-model="description"
               :rules="fieldRules"
             ></v-text-field>
+            <v-layout row class="mb-3" justify-center>
+              <v-btn class="warning" @click="triggerUpload">
+                Upload
+                <v-icon right dark>mdi-file-image</v-icon>
+              </v-btn>
+              <input
+                ref="fileInput"
+                type="file"
+                style="display: none;"
+                accept="image/*"
+                @change="onFileChange"
+              />
+            </v-layout>
+            <v-layout row class="mb-3" justify-center>
+              <img :src="imageSrc" height="100" v-if="imageSrc" />
+            </v-layout>
           </v-form>
         </v-card-text>
       </v-flex>
@@ -66,8 +82,10 @@ export default {
     ],
     title: "",
     description: "",
+    image: null,
     valid: false,
     fieldRules: [v => !!v || "Field is required"],
+    imageSrc: "",
   }),
   components: {
     Modal,
@@ -83,6 +101,8 @@ export default {
       if (isOpen === false) {
         this.title = "";
         this.description = "";
+        this.image = null;
+        this.imageSrc = "";
       }
       this.isModalOpen = isOpen;
     },
@@ -91,8 +111,22 @@ export default {
         .dispatch("createBoard", {
           title: this.title,
           description: this.description,
+          image: this.image,
         })
         .then(() => this.setOpen(false));
+    },
+    triggerUpload() {
+      this.$refs.fileInput.click();
+    },
+    onFileChange(event) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.imageSrc = reader.result;
+      };
+      reader.readAsDataURL(file);
+      this.image = file;
     },
   },
 };

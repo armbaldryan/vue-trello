@@ -5,9 +5,11 @@
     </template>
     <div class="list-box">
       <v-container fluid class="grey lighten-5 lists">
-        <v-layout align-center>
+        <v-layout>
           <div
-            v-if="!this.$store.getters.lists && !this.$store.getters.loading"
+            v-if="
+              !this.$store.getters.lists.length && !this.$store.getters.loading
+            "
             class="notFoundTitle"
           >
             Not Found Lists
@@ -75,18 +77,37 @@
                     </v-card>
                   </v-menu>
                 </span>
-                <span
-                  class="list-header-extras-limit-badge js-list-limit-badge hide"
-                ></span>
-                <a
-                  class="list-header-extras-menu dark-hover js-open-list-menu icon-sm icon-overflow-menu-horizontal"
-                  href="#"
-                >
-                  <div></div>
-                </a>
               </div>
               <v-divider color="grey" />
-              <a class="open-card-composer js-open-card-composer" href="#">
+              <div
+                class="list-cards u-fancy-scrollbar u-clearfix js-list-cards js-sortable ui-sortable"
+                v-for="card in item.cards"
+                :key="card.id"
+              >
+                <v-card>
+                  <v-card-text>{{ card.title }}</v-card-text>
+                </v-card>
+              </div>
+              <v-card v-if="selectedAddingCardList === item.id">
+                <v-text-field
+                  name="cardTitle"
+                  placeholder="Enter a title for this card…"
+                  hide-details
+                  flat
+                  v-model="cardTitle"
+                ></v-text-field>
+                <v-card-actions>
+                  <v-btn color="primary" @click="onAddCard(item.id)">Add</v-btn>
+                  <v-icon @click="selectedAddingCardList = null"
+                    >mdi-close</v-icon
+                  >
+                </v-card-actions>
+              </v-card>
+              <a
+                class="open-card-composer js-open-card-composer"
+                v-if="selectedAddingCardList !== item.id"
+                @click="addCard(item.id)"
+              >
                 <v-icon>mdi-plus</v-icon>
                 <span class="js-add-a-card hide">Add a card</span>
               </a>
@@ -166,6 +187,8 @@ export default {
     fieldRules: [v => !!v || "Field is required"],
     menu: [],
     selectedList: null,
+    selectedAddingCardList: null,
+    cardTitle: "",
   }),
   components: {
     Loading,
@@ -197,8 +220,8 @@ export default {
       }
       this.isEditModalOpen = isOpen;
     },
-    addCard() {
-      console.log(5);
+    addCard(id) {
+      this.selectedAddingCardList = id;
     },
     removeList(item) {
       this.$store
@@ -235,121 +258,22 @@ export default {
     nameHandler(title) {
       this.selectedList.title = title;
     },
+    onAddCard(id) {
+      if (this.cardTitle) {
+        this.$store
+          .dispatch("addCard", {
+            userId: this.$store.getters.user.id,
+            boardId: this.$router.history.current.params.id,
+            listId: id,
+            title: this.cardTitle,
+          })
+          .then(() => (this.selectedAddingCardList = null));
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-.lists {
-  user-select: none;
-  white-space: nowrap;
-  margin-bottom: 8px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 8px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-.list-wrapper {
-  width: 272px;
-  margin: 0 4px;
-  height: 100%;
-  box-sizing: border-box;
-  display: inline-block;
-  vertical-align: top;
-  white-space: nowrap;
-}
-.list {
-  background-color: #dfe1e6;
-  border-radius: 3px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
-  position: relative;
-  white-space: normal;
-}
-.list-header {
-  flex: 0 0 auto;
-  padding: 10px 8px;
-  position: relative;
-  min-height: 20px;
-}
-.list-header.is-menu-shown,
-.list-header.is-subscribe-shown {
-  padding-right: 36px;
-}
-.open-card-composer {
-  border-radius: 0 0 3px 3px;
-  color: #6b778c;
-  display: block;
-  flex: 0 0 auto;
-  padding: 8px;
-  position: relative;
-  text-decoration: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-.open-card-composer:active {
-  background-color: rgba(9, 30, 66, 0.25);
-}
-.open-card-composer:hover {
-  background-color: rgba(9, 30, 66, 0.13);
-  color: #172b4d;
-  text-decoration: none;
-}
-.list-wrapper.mod-add.is-idle {
-  background-color: #303f9f;
-  cursor: pointer;
-}
-
-.list-wrapper.mod-add {
-  background-color: #dfe1e6;
-  border-radius: 3px;
-  height: auto;
-  min-height: 32px;
-  padding: 4px;
-  transition: background 85ms ease-in, opacity 40ms ease-in,
-    border-color 85ms ease-in;
-}
-.list-wrapper.mod-add .open-add-list,
-.list-wrapper.mod-add .too-many-lists {
-  -webkit-text-decoration-line: none;
-  text-decoration-line: none;
-}
-.list-wrapper.mod-add.is-idle .placeholder {
-  display: block;
-}
-
-.list-wrapper.mod-add .placeholder {
-  color: #fff;
-  display: none;
-  padding: 6px 8px;
-  transition: color 85ms ease-in;
-}
-h2 {
-  font-size: 17px;
-  line-height: 24px;
-}
-.notFoundTitle {
-  display: inline-block;
-}
-.list-header-extras {
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  z-index: 1;
-}
-
-.list-header-extras-menu,
-.list-header-extras-subscribe {
-  color: #6b778c;
-  float: left;
-  padding: 6px;
-}
+@import "./style.css";
 </style>
