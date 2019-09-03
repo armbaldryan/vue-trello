@@ -45,6 +45,7 @@ export default {
             },
           };
         } else if (item.id === listId && item.cards) {
+          console.log(item.cards, card);
           return {
             ...item,
             cards: { ...item.cards, [card.id]: card },

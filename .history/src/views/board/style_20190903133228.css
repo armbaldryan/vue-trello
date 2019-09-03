@@ -72,6 +72,7 @@
   background-color: #303f9f;
   cursor: pointer;
 }
+
 .list-wrapper.mod-add {
   background-color: #dfe1e6;
   border-radius: 3px;
@@ -151,7 +152,4 @@ h2 {
 }
 .single-card {
   margin: 10px 0;
-}
-.card-input {
-  margin: 0 15px 10px;
 }

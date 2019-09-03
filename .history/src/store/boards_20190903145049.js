@@ -40,14 +40,13 @@ export default {
         if (item.id === listId && !item.cards) {
           return {
             ...item,
-            cards: {
-              [card.id]: card,
-            },
+            cards: [card],
           };
         } else if (item.id === listId && item.cards) {
+          console.log(item.cards, card);
           return {
             ...item,
-            cards: { ...item.cards, [card.id]: card },
+            cards: [...item.cards, card],
           };
         }
         return item;

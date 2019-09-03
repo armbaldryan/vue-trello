@@ -83,9 +83,7 @@
                 class="list-cards u-fancy-scrollbar u-clearfix js-list-cards js-sortable ui-sortable"
               >
                 <v-card
-                  v-for="card in item.cards
-                    ? Object.values(item.cards)
-                    : item.cards"
+                  v-for="card in Object.values(item.cards)"
                   :key="card.id"
                   class="single-card"
                 >
@@ -274,10 +272,7 @@ export default {
             listId: id,
             title: this.cardTitle,
           })
-          .then(() => {
-            this.cardTitle = "";
-            this.selectedAddingCardList = null;
-          });
+          .then(() => (this.selectedAddingCardList = null));
       }
     },
   },

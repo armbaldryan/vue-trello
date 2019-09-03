@@ -11,9 +11,7 @@
               !this.$store.getters.lists.length && !this.$store.getters.loading
             "
             class="notFoundTitle"
-          >
-            Not Found Lists
-          </div>
+          >Not Found Lists</div>
           <div
             class="js-list list-wrapper"
             v-for="item in this.$store.getters.lists"
@@ -23,17 +21,10 @@
             <div class="list js-list-content">
               <div class="list-header js-list-header u-clearfix is-menu-shown">
                 <div class="list-header-target js-editing-target"></div>
-                <h2
-                  class="list-header-name-assist js-list-name-assist"
-                  dir="auto"
-                >
-                  {{ item.title }}
-                </h2>
+                <h2 class="list-header-name-assist js-list-name-assist" dir="auto">{{ item.title }}</h2>
               </div>
               <div class="list-header-extras">
-                <span
-                  class="list-header-extras-subscribe js-list-subscribed hide"
-                >
+                <span class="list-header-extras-subscribe js-list-subscribed hide">
                   <v-menu
                     v-model="menu[item.id]"
                     :close-on-content-click="false"
@@ -83,19 +74,14 @@
                 class="list-cards u-fancy-scrollbar u-clearfix js-list-cards js-sortable ui-sortable"
               >
                 <v-card
-                  v-for="card in item.cards
-                    ? Object.values(item.cards)
-                    : item.cards"
+                  v-for="card in Object.values(item.cards)"
                   :key="card.id"
                   class="single-card"
                 >
                   <v-card-text>{{ card.title }}</v-card-text>
                 </v-card>
               </div>
-              <v-card
-                v-if="selectedAddingCardList === item.id"
-                class="card-input"
-              >
+              <v-card v-if="selectedAddingCardList === item.id" class="card-input">
                 <v-text-field
                   name="cardTitle"
                   placeholder="Enter a title for this card…"
@@ -105,9 +91,7 @@
                 ></v-text-field>
                 <v-card-actions>
                   <v-btn color="primary" @click="onAddCard(item.id)">Add</v-btn>
-                  <v-icon @click="selectedAddingCardList = null"
-                    >mdi-close</v-icon
-                  >
+                  <v-icon @click="selectedAddingCardList = null">mdi-close</v-icon>
                 </v-card-actions>
               </v-card>
               <a
@@ -142,12 +126,7 @@
               </v-toolbar>
               <v-card-text>
                 <v-form v-model="valid" ref="form" validation>
-                  <v-text-field
-                    name="title"
-                    label="Title"
-                    v-model="title"
-                    :rules="fieldRules"
-                  ></v-text-field>
+                  <v-text-field name="title" label="Title" v-model="title" :rules="fieldRules"></v-text-field>
                 </v-form>
               </v-card-text>
             </v-flex>
