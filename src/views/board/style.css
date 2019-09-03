@@ -6,13 +6,20 @@
   overflow-y: hidden;
   padding-bottom: 8px;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 0px;
+  right: 10px;
   bottom: 0;
-  left: 0;
+  left: 0px;
+}
+.layout {
+  display: inline-flex;
+  position: absolute;
+  top: 20px;
+  bottom: 0;
 }
 .list-wrapper {
   width: 272px;
+  min-width: 272px;
   margin: 0 4px;
   height: 100%;
   box-sizing: border-box;
@@ -70,6 +77,7 @@
   background-color: #dfe1e6;
   border-radius: 3px;
   min-height: 32px;
+  height: 45px;
   padding: 4px;
   transition: background 85ms ease-in, opacity 40ms ease-in,
     border-color 85ms ease-in;
@@ -140,4 +148,7 @@ h2 {
 .v-text-field > .v-input__control > .v-input__slot:before,
 .v-text-field > .v-input__control > .v-input__slot:after {
   display: none;
+}
+.single-card {
+  margin: 10px 0;
 }

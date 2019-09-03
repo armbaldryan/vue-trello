@@ -81,10 +81,12 @@
               <v-divider color="grey" />
               <div
                 class="list-cards u-fancy-scrollbar u-clearfix js-list-cards js-sortable ui-sortable"
-                v-for="card in item.cards"
-                :key="card.id"
               >
-                <v-card>
+                <v-card
+                  v-for="card in item.cards"
+                  :key="card.id"
+                  class="single-card"
+                >
                   <v-card-text>{{ card.title }}</v-card-text>
                 </v-card>
               </div>
