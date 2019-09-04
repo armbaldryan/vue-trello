@@ -199,7 +199,7 @@ export default {
           .ref(`boards/${userId}/${boardId}/lists/`)
           .set(newLists);
 
-        commit("createList", payload);
+        commit("loadLists", payload);
 
         commit("setLoading", false);
       } catch (error) {
