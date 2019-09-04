@@ -1,0 +1,170 @@
+.list-wrapper.mod-add .placeholder {
+  color: #fff;
+  display: none;
+  padding: 6px 8px;
+  transition: color 85ms ease-in;
+}
+h2 {
+  font-size: 17px;
+  line-height: 24px;
+}
+.notFoundTitle {
+  display: inline-block;
+}
+.list-header-extras {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  z-index: 1;
+}
+
+.list-header-extras-menu,
+.list-header-extras-subscribe {
+  color: #6b778c;
+  float: left;
+  padding: 6px;
+}
+.js-list-content .v-text-field {
+  background-color: #fff;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(9, 30, 66, 0.25);
+  cursor: pointer;
+  display: block;
+  margin-bottom: 8px;
+  max-width: 300px;
+  min-height: 20px;
+  position: relative;
+  text-decoration: none;
+  z-index: 0;
+  margin: 10px 0;
+  padding: 10px 0;
+}
+.js-list-content .v-text-field input {
+  padding: 8px;
+}
+.list-cards {
+  flex: 1 1 auto;
+  margin-bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 10px;
+  padding: 0 4px;
+  z-index: 1;
+  min-height: 0;
+}
+.v-text-field > .v-input__control > .v-input__slot:before,
+.v-text-field > .v-input__control > .v-input__slot:after {
+  display: none;
+}
+.single-card {
+  margin: 10px 0;
+}
+.card-input {
+  margin: 0 15px 10px;
+}
+
+$ease-out: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+$to-do: #f4ce46;
+$in-progress: #2a92bf;
+$approved: #00b961;
+
+.drag-list {
+  display: flex;
+  align-items: flex-start;
+
+  @media (max-width: 690px) {
+    display: block;
+  }
+}
+
+.item-dropzone-area {
+  height: 120px;
+  background: #888;
+  margin-left: 0.6rem;
+  width: 200px;
+  display: block;
+  margin-right: 0.6rem;
+}
+
+.drag-column {
+  flex: 1;
+  margin: 0 10px;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: 690px) {
+    margin-bottom: 30px;
+  }
+
+  h2 {
+    font-size: 0.8rem;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  &-to-do {
+    .drag-column-header,
+    .drag-options {
+      background: $to-do;
+    }
+  }
+
+  &-in-progress {
+    .drag-column-header,
+    .drag-options {
+      background: $in-progress;
+    }
+  }
+
+  &-approved {
+    .drag-column-header,
+    .drag-options {
+      background: $approved;
+    }
+  }
+}
+
+.drag-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  user-select: none;
+}
+
+.drag-inner-list {
+  overflow: auto;
+}
+
+.drag-item {
+  margin: 10px;
+  height: 60px;
+  background: rgba(black, 0.4);
+  transition: $ease-out;
+
+  /* items grabbed state */
+  &[aria-grabbed="true"] {
+    background: #5cc1a6;
+    color: #fff;
+  }
+
+  .drag-item-text {
+    font-size: 1rem;
+    padding-left: 1rem;
+    padding-top: 1rem;
+  }
+}
+
+.drag-header-more {
+  cursor: pointer;
+}
+
+@keyframes nodeInserted {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 0.8;
+  }
+}
