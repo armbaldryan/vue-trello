@@ -74,6 +74,7 @@
                 <v-divider color="grey" />
                 <div
                   class="list-cards u-fancy-scrollbar u-clearfix js-list-cards js-sortable ui-sortable"
+                  v-if="item.items"
                 >
                   <vue-draggable-group
                     :groups="lists"
@@ -134,6 +135,7 @@
               :isOpen="isModalOpen"
               :setOpen="setOpen"
               v-if="isModalOpen"
+              :loading="loading"
               :saveHandler="saveHandler"
               :saveDisabled="valid"
             >
@@ -154,6 +156,7 @@
               v-if="isEditModalOpen"
               :saveHandler="saveEditHandler"
               :saveDisabled="valid"
+              :loading="loading"
             >
               <v-flex xs12 sm12 md12>
                 <v-toolbar dark color="primary">
@@ -186,6 +189,9 @@ export default {
   computed: {
     lists() {
       return this.$store.getters.lists;
+    },
+    loading() {
+      return this.$store.getters.loading;
     },
   },
   data: () => ({
@@ -303,7 +309,7 @@ export default {
         .dispatch("editLists", {
           userId: this.$store.getters.user.id,
           boardId: this.$router.history.current.params.id,
-          payload: JSON.parse(JSON.stringify(payload)),
+          payload,
         })
         .then(() => console.log(444));
     },

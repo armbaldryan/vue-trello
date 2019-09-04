@@ -11,11 +11,13 @@
   bottom: 0;
   left: 0px;
 }
-.layout {
-  display: inline-flex;
-  position: absolute;
-  top: 20px;
-  bottom: 0;
+.list-box {
+  .layout {
+    display: inline-flex;
+    position: absolute;
+    top: 20px;
+    bottom: 0;
+  }
 }
 .list-wrapper {
   width: 272px;

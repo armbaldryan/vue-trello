@@ -13,11 +13,9 @@
             text
             :disabled="!saveDisabled"
             @click="saveHandler()"
-            >Save</v-btn
-          >
-          <v-btn color="green darken-1" text @click="setOpen(false)"
-            >Close</v-btn
-          >
+            :loading="loading"
+          >Save</v-btn>
+          <v-btn color="green darken-1" text @click="setOpen(false)">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -36,6 +34,7 @@ export default {
     isOpen: Boolean,
     saveHandler: Function,
     saveDisabled: Boolean,
+    loading: Boolean,
   },
   watch: {
     isOpen: function(newVal) {

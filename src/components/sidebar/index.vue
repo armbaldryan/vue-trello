@@ -24,6 +24,7 @@
       :setOpen="setOpen"
       v-if="isModalOpen"
       :saveHandler="saveHandler"
+      :loading="loading"
       :saveDisabled="valid && !!image"
     >
       <v-flex xs12 sm12 md12>
@@ -87,6 +88,11 @@ export default {
     fieldRules: [v => !!v || "Field is required"],
     imageSrc: "",
   }),
+  computed: {
+    loading() {
+      return this.$store.getters.loading;
+    },
+  },
   components: {
     Modal,
   },

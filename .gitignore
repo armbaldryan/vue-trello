@@ -2,6 +2,7 @@
 node_modules
 src/fbConfig.js
 /dist
+.history
 
 # local env files
 .env.local
