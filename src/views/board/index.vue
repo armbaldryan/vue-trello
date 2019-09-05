@@ -72,36 +72,7 @@
                   </span>
                 </div>
                 <v-divider color="grey" />
-                <div
-                  class="list-cards u-fancy-scrollbar u-clearfix js-list-cards js-sortable ui-sortable"
-                  v-if="item.items"
-                >
-                  <vue-draggable-group
-                    :groups="lists"
-                    :data-id="item.id"
-                    @change="onGroupsChange"
-                    :key="item.id"
-                    v-model="item.items"
-                  >
-                    <div class="drag-inner-list" :data-id="item.id">
-                      <v-card
-                        v-for="card in item.items"
-                        :key="card.id"
-                        :data-id="card.id"
-                        class="single-card drag-item"
-                        @mouseover="hover = card.id"
-                        @mouseleave="hover = null"
-                      >
-                        <v-card-text class="drag-item-text">{{ card.title }}</v-card-text>
-                        <v-icon
-                          class="edit-icon"
-                          @click="cardClickHandler(card)"
-                          v-show="hover === card.id"
-                        >mdi-pencil</v-icon>
-                      </v-card>
-                    </div>
-                  </vue-draggable-group>
-                </div>
+                <Cards :item="item" :lists="lists" :onGroupsChange="onGroupsChange" />
                 <v-card v-if="selectedAddingCardList === item.id" class="card-input">
                   <v-text-field
                     name="cardTitle"
@@ -188,6 +159,7 @@
 import Loading from "@/components/loading";
 import Modal from "@/components/modal";
 import isEqual from "lodash.isequal";
+import Cards from "./cards";
 
 export default {
   computed: {
@@ -215,21 +187,13 @@ export default {
       draggableSelector: ".drag-item",
       showDropzoneAreas: true,
       multipleDropzonesItemsDraggingEnabled: true,
-      onDrop: function(event, target) {
-        console.log(1, event, target);
-      },
-      onDragstart: function(event, target) {
-        console.log(2, event, target);
-      },
-      onDragend: function(event, target) {
-        console.log(3, event, target);
-      },
     },
     selectedCard: [],
   }),
   components: {
     Loading,
     Modal,
+    Cards,
   },
   beforeCreate() {
     this.$store.dispatch("fetchListsByBoardId", {
@@ -314,9 +278,6 @@ export default {
       if (!isEqual(this.changedList, payload)) {
         this.changedList = payload;
       }
-    },
-    cardClickHandler(item) {
-      console.log(item);
     },
   },
   watch: {

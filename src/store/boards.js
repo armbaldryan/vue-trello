@@ -32,31 +32,51 @@ export default {
         return item;
       });
     },
-    removeList(state, id) {
-      state.lists = state.lists.filter(item => item.id !== id);
-    },
-    createList(state, payload) {
-      state.lists.push(payload);
-    },
-    addCard(state, { listId, newCard: card }) {
+    editCard(state, { listId, selectedCard, title }) {
       state.lists = state.lists.map(item => {
-        if (item.id === listId && !item.items) {
+        if (item.id === listId) {
           return {
             ...item,
-            items: {
-              [item.id]: card,
-            },
-          };
-        } else if (item.id === listId && item.items) {
-          return {
-            ...item,
-            items: { ...item.items, [card.id]: card },
+            items: Object.values(item.items).map(card => {
+              if (card.cardId === selectedCard) {
+                return {
+                  ...card,
+                  title,
+                };
+              }
+              return card;
+            }),
           };
         }
         return item;
       });
     },
   },
+  removeList(state, id) {
+    state.lists = state.lists.filter(item => item.id !== id);
+  },
+  createList(state, payload) {
+    state.lists.push(payload);
+  },
+  addCard(state, { listId, newCard: card }) {
+    state.lists = state.lists.map(item => {
+      if (item.id === listId && !item.items) {
+        return {
+          ...item,
+          items: {
+            [item.id]: card,
+          },
+        };
+      } else if (item.id === listId && item.items) {
+        return {
+          ...item,
+          items: { ...item.items, [card.id]: card },
+        };
+      }
+      return item;
+    });
+  },
+
   actions: {
     async createBoard({ commit, getters }, payload) {
       commit("clearError");
@@ -193,8 +213,6 @@ export default {
         return acc;
       }, {});
 
-      console.log(newLists);
-
       try {
         await fb
           .database()
@@ -275,6 +293,30 @@ export default {
           .set(newCard);
 
         commit("addCard", { listId, newCard });
+
+        commit("setLoading", false);
+      } catch (error) {
+        commit("setError", error.message);
+        commit("setLoading", false);
+        throw error;
+      }
+    },
+    async editCard(
+      { commit },
+      { userId, boardId, listId, selectedCard, title }
+    ) {
+      commit("clearError");
+      commit("setLoading", true);
+
+      try {
+        await fb
+          .database()
+          .ref(
+            `boards/${userId}/${boardId}/lists/${listId}/items/${selectedCard}`
+          )
+          .update({ title });
+
+        commit("editCard", { listId, selectedCard, title });
 
         commit("setLoading", false);
       } catch (error) {
