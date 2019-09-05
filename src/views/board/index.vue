@@ -89,12 +89,15 @@
                         :key="card.id"
                         :data-id="card.id"
                         class="single-card drag-item"
+                        @mouseover="hover = card.id"
+                        @mouseleave="hover = null"
                       >
-                        <v-card-text class="drag-item-text">
-                          {{
-                          card.title
-                          }}
-                        </v-card-text>
+                        <v-card-text class="drag-item-text">{{ card.title }}</v-card-text>
+                        <v-icon
+                          class="edit-icon"
+                          @click="cardClickHandler(card)"
+                          v-show="hover === card.id"
+                        >mdi-pencil</v-icon>
                       </v-card>
                     </div>
                   </vue-draggable-group>
@@ -184,6 +187,7 @@
 <script>
 import Loading from "@/components/loading";
 import Modal from "@/components/modal";
+import isEqual from "lodash.isequal";
 
 export default {
   computed: {
@@ -204,6 +208,8 @@ export default {
     selectedList: null,
     selectedAddingCardList: null,
     cardTitle: "",
+    changedList: [],
+    hover: null,
     options: {
       dropzoneSelector: ".drag-inner-list",
       draggableSelector: ".drag-item",
@@ -305,6 +311,16 @@ export default {
       }
     },
     onGroupsChange(payload) {
+      if (!isEqual(this.changedList, payload)) {
+        this.changedList = payload;
+      }
+    },
+    cardClickHandler(item) {
+      console.log(item);
+    },
+  },
+  watch: {
+    changedList(payload) {
       this.$store
         .dispatch("editLists", {
           userId: this.$store.getters.user.id,

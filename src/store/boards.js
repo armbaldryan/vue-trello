@@ -193,6 +193,8 @@ export default {
         return acc;
       }, {});
 
+      console.log(newLists);
+
       try {
         await fb
           .database()
