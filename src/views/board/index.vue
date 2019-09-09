@@ -308,7 +308,6 @@ export default {
   },
   watch: {
     changedList(payload) {
-      console.log(payload);
       this.$store.dispatch("editLists", {
         userId: this.$store.getters.user.id,
         boardId: this.$router.history.current.params.id,

@@ -13,14 +13,9 @@ Vue.use(VueDraggable);
 new Vue({
   router,
   store,
-
-  data: {
-    title: "aaa",
-  },
   beforeCreate() {
     fb.initializeApp(fbConfig);
   },
-
   vuetify,
   render: h => h(App),
 }).$mount("#app");

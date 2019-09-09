@@ -13,9 +13,9 @@
       :key="index"
     >
       <v-img class="white--text" height="200px" :src="item.imageSrc">
-        <v-card-title class="align-end fill-height">{{
-          item.title
-        }}</v-card-title>
+        <v-card-title class="align-end fill-height">
+          {{ item.title }}
+        </v-card-title>
       </v-img>
 
       <v-card-text>
@@ -31,9 +31,6 @@
 
 <script>
 export default {
-  data: () => ({
-    boards: [],
-  }),
   beforeCreate() {
     this.$store.dispatch("fetchBoardsById", this.$store.getters.user.id);
   },
