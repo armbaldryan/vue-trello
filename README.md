@@ -5,7 +5,23 @@ Demo
 
 https://vue-trello-arm.firebaseapp.com/
 
-Screenshots
+You must include fbConfig.js in src folder and write your firebase configs inside that file like
+
+```sh
+export const fbConfig = {
+  ...
+};
+```
+
+## Quick Overview
+
+```sh
+npm i
+npm run serve
+```
+
+
+## Screenshots
 
 ![alt text](https://i.imgur.com/kYG19yX.png)
 
