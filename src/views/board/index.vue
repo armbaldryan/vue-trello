@@ -10,7 +10,9 @@
             <div
               v-if="!lists.length && !this.$store.getters.loading"
               class="notFoundTitle"
-            >Not Found Lists</div>
+            >
+              Not Found Lists
+            </div>
             <div
               class="js-list list-wrapper drag-column"
               v-for="item in lists"
@@ -18,15 +20,21 @@
               v-else
             >
               <div class="list js-list-content">
-                <div class="list-header js-list-header u-clearfix is-menu-shown">
+                <div
+                  class="list-header js-list-header u-clearfix is-menu-shown"
+                >
                   <div class="list-header-target js-editing-target"></div>
                   <h2
                     class="list-header-name-assist js-list-name-assist"
                     dir="auto"
-                  >{{ item.title }}</h2>
+                  >
+                    {{ item.title }}
+                  </h2>
                 </div>
                 <div class="list-header-extras">
-                  <span class="list-header-extras-subscribe js-list-subscribed hide">
+                  <span
+                    class="list-header-extras-subscribe js-list-subscribed hide"
+                  >
                     <v-menu
                       v-model="menu[item.id]"
                       :close-on-content-click="false"
@@ -41,7 +49,9 @@
                         <v-list>
                           <v-list-item>
                             <v-list-item-content>
-                              <v-list-item-title>List Actions</v-list-item-title>
+                              <v-list-item-title
+                                >List Actions</v-list-item-title
+                              >
                             </v-list-item-content>
                           </v-list-item>
                         </v-list>
@@ -72,8 +82,15 @@
                   </span>
                 </div>
                 <v-divider color="grey" />
-                <Cards :item="item" :lists="lists" :onGroupsChange="onGroupsChange" />
-                <v-card v-if="selectedAddingCardList === item.id" class="card-input">
+                <Cards
+                  :item="item"
+                  :lists="lists"
+                  :onGroupsChange="onGroupsChange"
+                />
+                <v-card
+                  v-if="selectedAddingCardList === item.id"
+                  class="card-input"
+                >
                   <v-text-field
                     name="cardTitle"
                     placeholder="Enter a title for this card…"
@@ -82,8 +99,12 @@
                     v-model="cardTitle"
                   ></v-text-field>
                   <v-card-actions>
-                    <v-btn color="primary" @click="onAddCard(item.id)">Add</v-btn>
-                    <v-icon @click="selectedAddingCardList = null">mdi-close</v-icon>
+                    <v-btn color="primary" @click="onAddCard(item.id)"
+                      >Add</v-btn
+                    >
+                    <v-icon @click="selectedAddingCardList = null"
+                      >mdi-close</v-icon
+                    >
                   </v-card-actions>
                 </v-card>
                 <a
@@ -119,7 +140,12 @@
                 </v-toolbar>
                 <v-card-text>
                   <v-form v-model="valid" ref="form" validation>
-                    <v-text-field name="title" label="Title" v-model="title" :rules="fieldRules"></v-text-field>
+                    <v-text-field
+                      name="title"
+                      label="Title"
+                      v-model="title"
+                      :rules="fieldRules"
+                    ></v-text-field>
                   </v-form>
                 </v-card-text>
               </v-flex>
@@ -282,13 +308,12 @@ export default {
   },
   watch: {
     changedList(payload) {
-      this.$store
-        .dispatch("editLists", {
-          userId: this.$store.getters.user.id,
-          boardId: this.$router.history.current.params.id,
-          payload,
-        })
-        .then(() => console.log(444));
+      console.log(payload);
+      this.$store.dispatch("editLists", {
+        userId: this.$store.getters.user.id,
+        boardId: this.$router.history.current.params.id,
+        payload,
+      });
     },
   },
 };

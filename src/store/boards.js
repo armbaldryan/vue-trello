@@ -51,32 +51,31 @@ export default {
         return item;
       });
     },
+    removeList(state, id) {
+      state.lists = state.lists.filter(item => item.id !== id);
+    },
+    createList(state, payload) {
+      state.lists.push(payload);
+    },
+    addCard(state, { listId, newCard: card }) {
+      state.lists = state.lists.map(item => {
+        if (item.id === listId && !item.items) {
+          return {
+            ...item,
+            items: {
+              [item.id]: card,
+            },
+          };
+        } else if (item.id === listId && item.items) {
+          return {
+            ...item,
+            items: { ...item.items, [card.id]: card },
+          };
+        }
+        return item;
+      });
+    },
   },
-  removeList(state, id) {
-    state.lists = state.lists.filter(item => item.id !== id);
-  },
-  createList(state, payload) {
-    state.lists.push(payload);
-  },
-  addCard(state, { listId, newCard: card }) {
-    state.lists = state.lists.map(item => {
-      if (item.id === listId && !item.items) {
-        return {
-          ...item,
-          items: {
-            [item.id]: card,
-          },
-        };
-      } else if (item.id === listId && item.items) {
-        return {
-          ...item,
-          items: { ...item.items, [card.id]: card },
-        };
-      }
-      return item;
-    });
-  },
-
   actions: {
     async createBoard({ commit, getters }, payload) {
       commit("clearError");
