@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="list-body">
     <div
       class="list-cards u-fancy-scrollbar u-clearfix js-list-cards js-sortable ui-sortable"
       v-if="item.items"
@@ -25,7 +25,8 @@
               class="edit-icon"
               @click="cardClickHandler(card)"
               v-show="hover === card.id"
-            >mdi-pencil</v-icon>
+              >mdi-pencil</v-icon
+            >
           </v-card>
         </div>
       </vue-draggable-group>
@@ -108,4 +109,7 @@ export default {
 </script>
 
 <style>
+.list-body {
+  overflow: auto;
+}
 </style>
